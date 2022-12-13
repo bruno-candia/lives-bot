@@ -1,21 +1,21 @@
 const express = require("express");
 const crypto = require("crypto");
-const { ApiClient } = require("twitch");
-const { ClientCredentialsAuthProvider } = require("twitch-auth");
 
-const port = process.env.PORT || 3000;
-const twitchSigningSecret = process.env.TWITCH_SIGNING_SECRET;
+const Twitch = require('./src/services/Twitch.service')
+const {
+  twitchClientId,
+  twitchSecret,
+  appPort,
+  twitchSigningSecret,
+} = require('./src/config/vars')
 
-const authProvider = new ClientCredentialsAuthProvider(
-  process.env.TWITCH_CLIENT_ID,
-  process.env.TWITCH_CLIENT_SECRET
-);
-
+const port = appPort || 3000;
 const app = express();
-const twitch = new ApiClient({ authProvider });
+
+const twitchService = new Twitch({ clientId: twitchClientId, secretId: twitchSecret });
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Safe");
 });
 
 const verifyTwitchSignature = (req, res, buf, encoding) => {
@@ -72,7 +72,7 @@ app.post("/webhooks/callback", async (req, res) => {
 
   if (type === "stream.online") {
     try {
-      sendOnline(event);
+      twitchService.sendOnline(event);
     } catch (ex) {
       console.log(
         `An error occurred sending the Online notification for ${event.broadcaster_user_name}: `,
