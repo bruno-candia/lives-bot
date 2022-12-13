@@ -1,0 +1,13 @@
+{
+  "name": "lives-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/bruno-candia/lives-bot.git",
+  "author": "Bruno Costa Candia <bruno852812@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "twitch": "^4.6.7"
+  }
+}
